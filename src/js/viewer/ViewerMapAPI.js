@@ -1,6 +1,6 @@
 "use strict";
 
-import { MAX_FOV, SCALING_MAP, MAP_ZOOM, LON_SCALAR, LAN_SCALAR } from "./ViewerConfig.js";
+import { MAX_FOV, SCALING_MAP } from "./ViewerConfig.js";
 // Map (2D) Viewer API
 
 // Specific API for the Map View
