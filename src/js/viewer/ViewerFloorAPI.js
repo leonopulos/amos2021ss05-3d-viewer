@@ -54,8 +54,13 @@ export class ViewerFloorAPI {
 
         this.createControlMenuButtonsOL();
 
-        // event listener for up/down with keyboard
-        document.addEventListener('keydown', (event) => this.upDownKeyboard(event));
+        if (this.floors.length < 2) {
+            // hide floor buttons
+            document.getElementById('buttonUpOL').style.display = 'none';
+            document.getElementById('buttonDownOL').style.display = 'none';
+        } else {
+            document.addEventListener('keydown', (event) => this.upDownKeyboard(event));   
+        }
     }
 
     all(callback) {
