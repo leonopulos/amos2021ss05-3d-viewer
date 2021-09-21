@@ -42,7 +42,7 @@ export class ViewerAPI {
             this.image = new ViewerImageAPI(data.images);
             this.floor = new ViewerFloorAPI(data, this);
 
-            this.pano = new ViewerPanoAPI(this);
+            this.panoProp = new ViewerPanoAPI(this);
             this.map = new ViewerMapAPI(this);
         }).then(() => {
             // the only html element we work with (the pano-viewer div)
@@ -64,9 +64,9 @@ export class ViewerAPI {
 
     animate() {
         window.requestAnimationFrame(() => this.animate());
-        this.pano.view(this.pano.viewerViewState.lonov, this.pano.viewerViewState.latov, this.pano.viewerViewState.fov);
+        this.panoProp.view(this.panoProp.viewerViewState.lonov, this.panoProp.viewerViewState.latov, this.panoProp.viewerViewState.fov);
         this.renderer.clear();
-        this.renderer.render(this.pano.scene, this.pano.camera);
+        this.renderer.render(this.panoProp.scene, this.panoProp.camera);
     }
 
     //Move the view to the nearest (euclidian distance) panorama to the given position. (ignore z value because only called on same floor)
@@ -89,7 +89,7 @@ export class ViewerAPI {
 
         // avoid duplication
         if (bestImg != this.image.currentImage) {
-            this.pano.display(bestImg.id);
+            this.panoProp.display(bestImg.id);
             this.map.redraw();
             return bestImg;
         }
@@ -129,7 +129,7 @@ export class ViewerAPI {
             this.image.currentImage.pos,
             this.image.currentImage.id,
             this.floor.currentFloor.name,
-            this.pano.viewerViewState
+            this.panoProp.viewerViewState
         );
 
         callback(currentState);
@@ -158,6 +158,10 @@ export class ViewerAPI {
             dx * 1000,
             dy * 1000,
             globalCoords[2] - this.floor.currentFloor.z);
+    }
+
+    get pano() {
+        return this.panoProp;
     }
 
     // TODO: swap() and big(wanted)
