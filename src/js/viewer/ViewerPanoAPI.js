@@ -393,14 +393,12 @@ export class ViewerPanoAPI {
         const xy = new EventPosition(event);
         const location = this.getCursorLocation(event);
 
+        const callbackList = [];
         meshes.forEach((mesh) => {
             if (typeof mesh.vwr_oncontext == "function") {
                 const callback = mesh.vwr_oncontext(xy, location);
 
-                $.contextMenu({
-                    selector: '#pano-viewer',
-                    items: callback,
-                });
+                callback.forEach((elem) => callbackList.push(elem));
             }
         });
 
@@ -411,11 +409,16 @@ export class ViewerPanoAPI {
             if (typeof layer.vwr_oncontext == "function") {
                 const callback = layer.vwr_oncontext(xy, location);
 
-                $.contextMenu({
-                    selector: '#pano-viewer',
-                    items: callback,
-                });
+                callback.forEach((elem) => callbackList.push(elem));
             }
+        });
+
+        if (callbackList.length == 0) return;
+
+        $.contextMenu('destroy');
+        $.contextMenu({
+            selector: '#pano-viewer',
+            items: callbackList,
         });
     }
 

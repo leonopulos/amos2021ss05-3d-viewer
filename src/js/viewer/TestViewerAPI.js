@@ -9,6 +9,31 @@ export class TestViewerAPI {
         this.viewerAPI = viewerAPI;
     }
 
+    eventLayerTest() {
+        const testMesh = {};
+
+        testMesh.vwr_oncontext = function (xy, position) {
+            console.log("vwr_oncontext is triggered.");
+            console.log("Pointer position: ", xy);
+            console.log("Local coordinate for pointer position: ", position);
+
+            //Creating callback function for context menu item:
+            let callback = function (key, options) {
+                var msg = 'clicked: ' + key;
+                (window.console && console.log(msg)) || alert(msg);
+            };
+
+            //Creating item objects
+            let itemEdit = new ViewerContextItem(callback, "edit", null, "EventLayer Edit");
+            let itemCut = new ViewerContextItem(callback, "cut", null, "EventLayer Cut");
+
+            //Creating list of item objects.
+            return [itemEdit, itemCut];
+        }
+
+        this.viewerAPI.pano.addLayer(testMesh);
+    }
+
     eventMeshTest(x = 0, y = 0, z = -2, exclude = ["vwr_onpointer", "vwr_ondrag"]) {
         // visual test, spawn in white sphere at first image position in scene (offset specified by parameters)
         const sphere = new this.viewerAPI.THREE.SphereGeometry(1 / 5, 10, 10);
