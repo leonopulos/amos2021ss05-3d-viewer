@@ -15,7 +15,7 @@ export class ViewerPanoAPI {
         this.scene = new THREE.Scene(); // three.js scene used by the panorama (3D) viewer
         this.camera = new THREE.PerspectiveCamera(DEFAULT_FOV, window.innerWidth / window.innerHeight, 1, 1100);
         this.camera.up = new THREE.Vector3(0, 0, 1);
-        this.sphereRadius = 10;
+        this.sphereRadius = 4;
 
         // number of lights - needed for external API EventMesh integration
         this.lights = 0;
