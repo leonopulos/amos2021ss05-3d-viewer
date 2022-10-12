@@ -28,6 +28,12 @@
                 console.info("initial callback called:", viewerWindow, viewerAsync);
                 viewerAsync("../assets/", (api) => {
                     console.info("loaded callback called with API:", api);
+
+                    // set starting picture to right location
+                    api.panoProp.viewerViewState.setLatov(0);
+                    api.panoProp.viewerViewState.setLonov(295);
+                    api.panoProp.viewerViewState.fov = 100;
+                    api.move(11.111107794018679, 49.461045692915604, 0);                    
                 });
             }
         };
