@@ -17,11 +17,19 @@
             padding: 0;
             overflow: hidden;
         }
+        a {
+            position: absolute;
+            z-index: 199;
+            background-color: lightgray;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
     <iframe id="amos"></iframe>
-    <script>
+    <script type="module">
+        import { POIConverter } from './src/js/POIConverter.js'
+        
         // Callback function to start viewer via viewerAsync
         window.parent = {
             callback: function(viewerWindow, viewerAsync) {
@@ -33,7 +41,37 @@
                     api.panoProp.viewerViewState.setLatov(0);
                     api.panoProp.viewerViewState.setLonov(295);
                     api.panoProp.viewerViewState.fov = 100;
-                    api.move(11.111107794018679, 49.461045692915604, 0);                    
+                    api.move(11.111107794018679, 49.461045692915604, 0);
+
+                    // Create div for POI description overlays (hidden for now)
+                    api.jQuery('<div>', {
+                        id: 'poi-desc',
+                    }).appendTo('#pano-viewer');
+                    api.jQuery("#poi-desc")
+                        .css("background-color", "white")
+                        .css("position", "fixed")
+                        .css("width", "60%")
+                        .css("height", "60%")
+                        .css("top", "50%")
+                        .css("left", "50%")
+                        .css("margin-top", "-30%")
+                        .css("margin-left", "-30%")
+                        .css("border-radius", "4%")
+                        .css("display", "none")
+                        .css("display", "none");
+                    // TODO: read in one by one poi_geo and at each converted coords create (small) EventMesh that has on_click to open POI and maybe on_hover to show name
+                    // or maybe only on_hover show div with content of descrX.txt
+                    var txt = '';
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function(){
+                        if (xmlhttp.status == 200 && xmlhttp.readyState == 4){
+                            txt = xmlhttp.responseText;
+                            let poic = new POIConverter(txt, api);
+                            poic.insertObjectsInScene();
+                        }
+                    };
+                    xmlhttp.open("GET","pois/poi_geo.txt", true);
+                    xmlhttp.send();
                 });
             }
         };
@@ -41,6 +79,8 @@
         // start src/index.html
         document.getElementById('amos').setAttribute('src', "./src/index.html?onload=window.parent.callback");
     </script>
+
+    <a href="pois/Station 1/affenpuzzle/index.html">Weitere Stationen</a>
 </body>
 
 </html>
